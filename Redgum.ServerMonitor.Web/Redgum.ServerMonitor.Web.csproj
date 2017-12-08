@@ -5,17 +5,49 @@
     <UserSecretsId>aspnet-Redgum.ServerMonitor.Web-C72FF49E-4D60-4F49-9157-4321B9B1F31F</UserSecretsId>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="ServerMonitor\PowerShellScripts\Get-SystemStatus.ps1" />
+    <None Remove="ServerMonitor\PowerShellScripts\Get-WindowsUpdateStatus.ps1" />
+    <None Remove="ServerMonitor\PowerShellScripts\Install-ScriptsAndScheduledTask.ps1" />
+    <None Remove="ServerMonitor\PowerShellScripts\Update-SystemStatus.ps1" />
+    <None Remove="ServerMonitor\Data\TestData\ServerData.txt" />
+    <None Remove="ServerMonitor\Data\TestData\Servers.txt" />
+  </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.0.0" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.0" PrivateAssets="All" />
+    <EmbeddedResource Include="ServerMonitor\PowerShellScripts\Get-SystemStatus.ps1" />
+    <EmbeddedResource Include="ServerMonitor\PowerShellScripts\Get-WindowsUpdateStatus.ps1" />
+    <EmbeddedResource Include="ServerMonitor\PowerShellScripts\Install-ScriptsAndScheduledTask.ps1" />
+    <EmbeddedResource Include="ServerMonitor\PowerShellScripts\Update-SystemStatus.ps1" />
+    <EmbeddedResource Include="ServerMonitor\Data\TestData\Settings.txt" />
+    <EmbeddedResource Include="ServerMonitor\Data\TestData\ServerDataAgregate.txt" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="Humanizer" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.0.1" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.1" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.0" />
     <DotNetCliToolReference Include="Microsoft.Extensions.SecretManager.Tools" Version="2.0.0" />
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.0" />
+    <DotNetCliToolReference Include="Microsoft.DotNet.Watcher.Tools" Version="2.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="ServerMonitor\Data\TestData\ServerData.txt" />
+    <EmbeddedResource Include="ServerMonitor\Data\TestData\Servers.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\Server\Index.cshtml" />
+    <None Include="Views\Server\ViewServer.cshtml" />
+    <None Include="wwwroot\images\redgum.svg" />
   </ItemGroup>
 
 </Project>

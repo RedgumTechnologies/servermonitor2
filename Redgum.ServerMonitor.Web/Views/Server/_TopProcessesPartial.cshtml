@@ -1,0 +1,54 @@
+﻿@model Redgum.ServerMonitor.Web.ServerMonitor.Models.ServerModel
+<div class="row">
+    <div class="col-md-6">
+        <h3>Top 5 CPU Processes</h3>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Process</th>
+                        <th>CPU Time</th>
+                        <th>Working Memory</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var t in Model.CPUProcesses)
+                    {
+                        <tr>
+                            <td>@t.ProcessName</td>
+                            <td>@t.CPUTime</td>
+                            <td>@t.WorkingSetInMB&nbsp; MB</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <h3>Top 5 Memory Processes</h3>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Process</th>
+                        <th>CPU Time</th>
+                        <th>Working Memory</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var t in Model.MemoryProcesses)
+                    { 
+                        <tr>
+                            <td>@t.ProcessName</td>
+                            <td>@t.CPUTime</td>
+                            <td>@t.WorkingSetInMB&nbsp; MB</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+

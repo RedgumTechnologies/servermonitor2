@@ -1,0 +1,138 @@
+﻿@using Humanizer;
+@using Redgum.ServerMonitor.Web.ServerMonitor.Models
+@model Redgum.ServerMonitor.Web.ServerMonitor.Models.MonitoredServersViewModel
+@{
+    ViewBag.Title = "Monitored Servers";
+}
+
+<style>
+    pre {
+        white-space: inherit;
+    }
+</style>
+
+<button type="button" id="btnrefresh" class="btn btn-primary pull-right">Refresh</button>
+<div class="row">
+    <div class="col-md-12">
+        <div class="table-responsive">
+            <table class="table table-condensed">
+                <thead>
+                    <tr>
+                        <th>Domain</th>
+                        <th>Name</th>
+                        <th>Last Updated</th>
+                        <th>Disk Status</th>
+                        <th>Pending Updates</th>
+                        <th>Sites</th>
+                        <th>SQL Status</th>
+                        <th>Database Status</th>
+                        <th>Service Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var t in Model.Servers)
+                    {
+                        string classString = String.Empty;
+                        if (DateTimeOffset.Now.Subtract(t.LastUpdatedUtc).TotalHours > 24)
+                        {
+                            classString = "danger";
+                        }
+                        else if (DateTimeOffset.Now.Subtract(t.LastUpdatedUtc).TotalMinutes > 30)
+                        {
+                            classString = "warning";
+                        }
+                    
+                        <tr class="@classString">
+                            <td>@t.Domain</td>
+                            @*<td>@Html.ActionLink(t.Name, "ViewServer", new { serverName = t.Name })</td>*@
+                            <td><a asp-action="ViewServer" asp-route-serverName="@t.Name" >@t.Name</a></td>
+                            <td><span rel="tooltip" title="@t.LastUpdatedUtc UTC">@t.LastUpdatedUtc.Humanize()</span></td>
+                            <td>@if (!(t.DiskInfoStatus != Status.Unknown  && t.DriveInfoStatus != Status.Unknown))
+                                {
+                                    if (t.DiskInfoStatus != Status.Unknown && t.DiskInfoStatus != Status.OK)
+                                    {<span class="glyphicon glyphicon-warning-sign"></span>}
+                                    else if (t.DriveInfoStatus != Status.Unknown && t.DriveInfoStatus != Status.OK)
+                                    {<span class="glyphicon glyphicon-warning-sign"></span>}
+                                    else
+                                    {<span class="glyphicon glyphicon-ok"></span>}
+                                } </td>
+                            <td>@Html.ActionLink(t.PendingUpdateCount.ToString(), "ViewServer", "Server", null, null, "pendingupdates", new { serverName = t.Name }, new { })</td>
+                            <td><a href="@Url.Action("ViewServer", new { serverName = t.Name })#websites">
+                                @t.WebsiteCount
+                                @if (t.WebsiteStatus != Status.Unknown && t.WebsiteStatus != Status.OK)
+                                {<span class="glyphicon glyphicon-warning-sign"></span>}
+                            </a>
+
+                            </td>
+                            <td>@if (t.SqlServerStatus != Status.Unknown)
+                                {
+                                <a href="@Url.Action("ViewServer", new { serverName = t.Name })#sql">
+                                    @if (t.SqlServerStatus != Status.OK)
+                                    {<span class="glyphicon glyphicon-warning-sign"></span>}
+                                    else
+                                    {<span class='glyphicon glyphicon-ok'></span>}
+                                </a>
+                                }</td>
+                            <td>@if (t.SqlDatabaseStatus != Status.Unknown)
+                                {
+                                <a href="@Url.Action("ViewServer", new { serverName = t.Name })#sql">
+                                    @if (t.SqlDatabaseStatus != Status.OK)
+                                    {<span class="glyphicon glyphicon-warning-sign"></span>}
+                                    else
+                                    {<span class="glyphicon glyphicon-ok"></span>}
+                                </a>
+                                }</td>
+                            <td>@if (t.ServiceStatus != Status.Unknown)
+                                {
+                                <a href="@Url.Action("ViewServer", new { serverName = t.Name })#services">
+                                    @if (t.ServiceStatus != Status.OK)
+                                    {<span class="glyphicon glyphicon-warning-sign"></span>}
+                                    else
+                                    {<span class="glyphicon glyphicon-ok"></span>}
+                                </a>
+                                }
+                            </td>
+
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">       
+        To install the server monitor scripts, run this command from a command prompt
+        <pre>&#64;powershell -NoProfile -ExecutionPolicy unrestricted -Command "iex (new-object net.webclient).DownloadString('@Model.RequestUrl.Trim('/')/api/v1/scripts/GetInstallScripts')"</pre>
+    </div>
+    </div>
+    @section Scripts {
+        <script type="text/javascript">
+            //Setup refresh
+            var time = new Date().getTime();
+            $(document.body).bind("mousemove keypress", function (e) {
+                time = new Date().getTime();
+            });
+
+            function refresh() {
+                if (new Date().getTime() - time >= 60000)
+                    window.location.reload(true);
+                else
+                    setTimeout(refresh, 10000);
+            }
+
+            setTimeout(refresh, 10000);
+
+            $(document).ready(function () {
+                // start refresh timer..
+                $("#btnrefresh").click(function () { window.location.reload(true); });
+
+                // Bind tooltips
+                $("[rel='tooltip']").tooltip();
+            });
+        </script>
+    }

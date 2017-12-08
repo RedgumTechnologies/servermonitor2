@@ -5,14 +5,28 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Redgum.ServerMonitor.Web.Models;
+using Redgum.ServerMonitor.Web.Data;
+using Redgum.ServerMonitor.Web.ServerMonitor.Data;
 
 namespace Redgum.ServerMonitor.Web.Controllers
 {
     public class HomeController : Controller
     {
+        //MonitorDbContext _ctx;
+
+        //public HomeController(MonitorDbContext ctx)
+        //{
+        //    _ctx = ctx;
+        //}
+
+
         public IActionResult Index()
         {
-            return View();
+            return RedirectToAction("Index", "Server");
+
+            //var x = _ctx.Servers.ToList();
+
+            //return View();
         }
 
         public IActionResult About()

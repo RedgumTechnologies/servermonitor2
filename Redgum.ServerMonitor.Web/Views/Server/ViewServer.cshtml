@@ -1,0 +1,66 @@
+﻿@using Redgum.ServerMonitor.Web.ServerMonitor.Models
+@model Redgum.ServerMonitor.Web.ServerMonitor.Models.ServerModel
+@{
+    ViewBag.Title = String.Format("Server Status - {0}", @Model.Name);
+}
+<!-- Tabs --->
+<ul id="stats-tabs" class="nav nav-tabs">
+    <li class="active"><a href="#home" data-toggle="tab">Home @if (Model.DiskInfoStatus != Status.Unknown && Model.DiskInfoStatus != Status.OK)
+                                                              {<span class="glyphicon glyphicon-warning-sign"></span>}
+                                                              else if (Model.DriveInfoStatus != Status.Unknown && Model.DriveInfoStatus != Status.OK)
+                                                              {<span class="glyphicon glyphicon-warning-sign"></span>}</a></li>
+    <li><a href="#pendingupdates" data-toggle="tab">Pending Updates (@Model.PendingUpdates.Count())</a></li>
+    <li><a href="#websites" data-toggle="tab">Websites @if (Model.WebsiteStatus != Status.Unknown && Model.WebsiteStatus != Status.OK)
+                                                       {<span class="glyphicon glyphicon-warning-sign"></span>}</a></li>
+
+    <li><a href="#sql" data-toggle="tab">SQL @if ((Model.SqlDatabaseStatus != Status.Unknown && Model.SqlDatabaseStatus != Status.OK) || (Model.SqlServerStatus != Status.Unknown && Model.SqlServerStatus != Status.OK))
+                                             {<span class="glyphicon glyphicon-warning-sign"></span>}</a></li>
+
+
+    <li><a href="#services" data-toggle="tab">Services @if (Model.ServiceStatus != Status.OK)
+                                                       { <span class="glyphicon glyphicon-warning-sign"></span>}</a></li>
+    <li><a href="#Processes" data-toggle="tab">Top Processes</a></li>
+</ul>
+
+<!-- Tab panes -->
+<div class="tab-content">
+    <div class="tab-pane active" id="home">
+        @Html.Partial("_BasicInfoPartial", Model)
+    </div>
+    <div class="tab-pane" id="pendingupdates">
+        @Html.Partial("_PendingUpdatesPartial", Model)
+    </div>
+    <div class="tab-pane" id="websites">
+        @Html.Partial("_WebsitesPartial", Model)
+    </div>
+
+    <div class="tab-pane" id="sql">
+        @Html.Partial("_SQLPartial", Model)
+    </div>
+    <div class="tab-pane" id="services">
+        @Html.Partial("_ServicesPartial", Model)
+    </div>
+    <div class="tab-pane" id="Processes">
+        @Html.Partial("_TopProcessesPartial", Model)
+    </div>
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('.nav-tabs a').click(function (e) {
+                e.preventDefault()
+                window.location.hash = $(this).attr('href');
+                $(this).tab('show')
+            });
+            if (window.location.hash) {
+                var hash = window.location.hash.substring(1); //Puts hash in variable, and removes the # character
+                // Flick tab to the hash
+                $('.nav-tabs a[href="#' + hash + '"]').click();
+            }
+            $("[rel='tooltip']").tooltip();
+        });
+    </script>
+
+}

@@ -11,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Redgum.ServerMonitor.Web.Data;
 using Redgum.ServerMonitor.Web.Models;
 using Redgum.ServerMonitor.Web.Services;
+using Redgum.ServerMonitor.Web.ServerMonitor.Data.TestData;
+using Redgum.ServerMonitor.Web.ServerMonitor.Data;
 
 namespace Redgum.ServerMonitor.Web
 {
@@ -26,8 +28,11 @@ namespace Redgum.ServerMonitor.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<MonitorDbContext>(options =>
+               options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+               options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -36,7 +41,12 @@ namespace Redgum.ServerMonitor.Web
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
 
+            services.AddScoped<MonitorContextInitialiser>();
+            services.AddScoped<ServerInfoSaver>();
+            services.AddScoped<ServerInfoQueries>();
+
             services.AddMvc();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -63,6 +73,7 @@ namespace Redgum.ServerMonitor.Web
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
         }
     }
 }

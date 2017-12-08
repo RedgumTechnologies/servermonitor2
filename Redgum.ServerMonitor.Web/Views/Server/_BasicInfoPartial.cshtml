@@ -1,0 +1,179 @@
+﻿@model Redgum.ServerMonitor.Web.ServerMonitor.Models.ServerModel
+@using Humanizer;
+<div class="row">
+    <div class="col-md-4">
+        <dl class="dl-horizontal">
+            <dt>Manufacturer:</dt>
+            <dd>@Model.DetailedInfo.Manufacturer </dd>
+            <dt>Model:</dt>
+            <dd>@Model.DetailedInfo.Model </dd>
+            <dt>System Type:</dt>
+            <dd>@Model.DetailedInfo.SystemType </dd>
+        </dl>
+
+    </div>
+    <div class="col-md-4">
+        <dl class="dl-horizontal">
+            <dt>Windows:</dt>
+            <dd>@Model.DetailedInfo.WindowsVersionName </dd>
+            <dt>Version:</dt>
+            <dd>@Model.DetailedInfo.WindowsVersion</dd>
+
+
+        </dl>
+    </div>
+    <div class="col-md-4">
+        <dl class="dl-horizontal">
+            <dt>Processors:</dt>
+            <dd>@Model.DetailedInfo.Processors </dd>
+            <dt>Logical Processors:</dt>
+
+            <dd>@Model.DetailedInfo.LogicalProcessors  </dd>
+            <dt>Total Physical Memory:</dt>
+            <dd>@Model.DetailedInfo.TotalPhysicalMemory</dd>
+
+            <dt>Uptime:</dt>
+            <dd>@Model.DetailedInfo.HostUptime.Humanize()</dd>
+        </dl>
+
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <h3>Drives</h3>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Volume</th>
+                        <th>Size</th>
+                        <th>Free Space</th>
+                        <th>Percent Free</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var t in Model.Disks)
+                    {
+                        if (t.PercentFree < (decimal)10)
+                        { 
+                        <tr class="danger">
+                            <td>@t.Name</td>
+                            <td>@t.VolumeName</td>
+                            <td>@t.SizeInGB&nbsp; GB</td>
+                            <td>@t.FreeSpaceInGB&nbsp; GB</td>
+                            <td>@t.PercentFree&nbsp; %</td>
+                        </tr>
+                        }
+                        else
+                            if (t.PercentFree < (decimal)15)
+                            { 
+                        <tr class="warning">
+                            <td>@t.Name</td>
+                            <td>@t.VolumeName</td>
+                            <td>@t.SizeInGB&nbsp; GB</td>
+                            <td>@t.FreeSpaceInGB&nbsp; GB</td>
+                            <td>@t.PercentFree&nbsp; %</td>
+                        </tr>
+                            }
+                            else
+                            {
+                        <tr>
+
+                            <td>@t.Name</td>
+                            <td>@t.VolumeName</td>
+                            <td>@t.SizeInGB&nbsp; GB</td>
+                            <td>@t.FreeSpaceInGB&nbsp; GB</td>
+                            <td>@t.PercentFree&nbsp; %</td>
+                        </tr>
+
+                            }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <h3>Disks</h3>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+
+                        <th>DeviceID</th>
+                        <th>Serial Number</th>
+                        <th>Model</th>
+                        <th>Size</th>
+                        <th>Partitions</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var t in Model.Drives)
+                    {
+                        if (t.Status == DriveStatus.OK)
+                        {
+                        <tr>
+                            <td>@t.DeviceID</td>
+                            <td>@t.SerialNumber</td>
+                            <td>@t.Model</td>
+                            <td>@t.Size</td>
+                            <td>@t.Partitions</td>
+                            <td>@if (t.Status == DriveStatus.OK)
+                                {<span class="glyphicon glyphicon-ok"></span>}
+                                else
+                                {<span class="glyphicon glyphicon-warning-sign"></span>}</td>
+                        </tr>
+                        }
+                        else
+                        {
+                        <tr class="danger">
+                            <td>@t.DeviceID</td>
+                            <td>@t.SerialNumber</td>
+                            <td>@t.Model</td>
+                            <td>@t.Size</td>
+                            <td>@t.Partitions</td>
+                            <td>@if (t.Status == DriveStatus.OK)
+                                {<span class="glyphicon glyphicon-ok"></span>}
+                                else
+                                {<span class="glyphicon glyphicon-warning-sign"></span>}</td>
+                        </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <h3>Networks</h3>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <td>Description</td>
+                        <td>MAC Address</td>
+                        <td>IP Addresses</td>
+                        <td>Subnet</td>
+                        <td>Default Gateway</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var t in Model.Networks)
+                    {
+                        <tr>
+                            <td>@t.Description</td>
+                            <td>@t.MACAddress</td>
+                            <td>@t.IPAddress</td>
+                            <td>@t.IPSubnet</td>
+                            <td>@t.DefaultIPGateway</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

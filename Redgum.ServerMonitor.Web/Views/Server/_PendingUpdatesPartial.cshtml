@@ -1,0 +1,29 @@
+﻿@model Redgum.ServerMonitor.Web.ServerMonitor.Models.ServerModel
+
+<div class="row">
+    <div class="col-md-12">
+        <h3>Pending Updates</h3>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Is Downloaded</th>
+                        <th>Size</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var t in Model.PendingUpdates)
+                    {
+                        <tr>
+                            <td>@t.Title</td>
+                            <td>@if(t.IsDownloaded)  {<span class="glyphicon glyphicon-ok"></span>} else {<span class="glyphicon glyphicon-remove"></span>}</td>
+                            <td>@t.DownloadSize</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
