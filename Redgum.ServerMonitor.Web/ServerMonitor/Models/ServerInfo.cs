@@ -33,11 +33,6 @@ namespace Redgum.ServerMonitor.Web.ServerMonitor.Models
         public List<ProcessInfo> TopCpuProcesses { get; set; }
         public List<ProcessInfo> TopMemoryProcesses { get; set; }
 
-        ///// <summary>
-        ///// Special tracking property for all keyed values
-        ///// </summary>
-        //public List<RawData> Data { get; set; }
-        //public List<RawData> AggregateData { get; set; }
     }
 
     public class RawData

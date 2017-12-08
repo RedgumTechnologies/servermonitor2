@@ -88,20 +88,6 @@ namespace Redgum.ServerMonitor.Web.ServerMonitor.Data.TestData
 
             _ctx.SaveChanges();
 
-            var xx = Extensions.GetTestData("ServerData.txt")
-                .GetLines().ToList();
-
-            for (int i = 0; i < xx.Count(); i++)
-            {
-                var s = xx[i];
-                var Identifier = s.GetTabIndexGuid(1);
-      var DataKey = s.GetTabIndexString(3);
-         var           Data = s.GetTabIndexString(4);
-            var Server = testServersById[s.GetTabIndexInt(2)];
-            }
-
-
-
             _ctx.ServerData.AddRange(Extensions.GetTestData("ServerData.txt")
                 .GetLines()
                 .Select(s => new ServerDataDataModel()

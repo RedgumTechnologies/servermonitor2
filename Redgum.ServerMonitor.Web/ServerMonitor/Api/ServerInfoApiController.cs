@@ -38,6 +38,8 @@ namespace Redgum.ServerMonitor.Web.ServerMonitor.Api
 
         }
 
+        // leaving this here because it was in the old version
+        // not sure if anyone uses this
         //[HttpGet("List")]
         //public IActionResult List()
         //{

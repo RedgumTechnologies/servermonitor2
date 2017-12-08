@@ -12,21 +12,10 @@ namespace Redgum.ServerMonitor.Web.Controllers
 {
     public class HomeController : Controller
     {
-        //MonitorDbContext _ctx;
-
-        //public HomeController(MonitorDbContext ctx)
-        //{
-        //    _ctx = ctx;
-        //}
-
 
         public IActionResult Index()
         {
             return RedirectToAction("Index", "Server");
-
-            //var x = _ctx.Servers.ToList();
-
-            //return View();
         }
 
         public IActionResult About()

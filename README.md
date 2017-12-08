@@ -19,6 +19,10 @@ Until we work out how to do the same thing, the actual db for storing the monito
 Open a command prompt in the web directory and run
 ``` dotnet ef database update --context MonitorDbContext ```
 
+Not that there is any security yet, but you can create new accounts at this endpoint
+```/Account/Register```
+
+
 ## Entity Framework Core Stuff
 
 TODO 
